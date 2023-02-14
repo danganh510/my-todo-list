@@ -17,7 +17,6 @@ function autoloader($class) {
   $name_space = implode("\\",$arrNameSpace);
   
   $class = str_replace('\\', '/', $class) . '.php';
-  
   // Make sure the class file exists
   if (file_exists($autoLoad[$name_space] . $class)) {
     // Include the class file

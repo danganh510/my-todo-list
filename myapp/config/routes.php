@@ -2,8 +2,8 @@
 
 // Array to store the routes and the corresponding controller and action
 $routes = [
-  "/todo-list" => [
-    'controller' => "todolist",
+  "/my-works" => [
+    'controller' => "works",
     'action' => "index"
   ],
   "/login" => [
@@ -30,8 +30,11 @@ if (!isset($routes[$request_uri])) {
   $action_name = $route['action'];
 }
 
+Session::set("controllerName",$controller_name);
+Session::set("actionName",$action_name);
+
 // Set the path to the controller file
-$controller_file = './apps/controllers/' . $controller_name . 'Controller.php';
+$controller_file = './apps/controllers/' .ucfirst( $controller_name) . 'Controller.php';
 
 // Check if the controller file exists
 if (!file_exists($controller_file)) {

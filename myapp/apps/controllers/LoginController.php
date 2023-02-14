@@ -1,13 +1,15 @@
 <?php
-namespace MyTodoList\Controllers;
-use MyTodoList\Controllers\BaseController;
+use MyTodoList\Controllers\ControllerBase;
 
-class TodolistController extends BaseController
+class LoginController extends ControllerBase
 {
 
   // Hàm hiển thị kết quả ra cho người dùng.
-  function indexAction()
+  public function loginAction()
   {
-    $sql_list_todo = "SELECT * FROM ";
+
+    $this->render([
+      'title' => "login",
+    ]);
   }
 }
