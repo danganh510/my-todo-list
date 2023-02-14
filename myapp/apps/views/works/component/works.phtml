@@ -1,22 +1,24 @@
+<?php
+
+$statusClass = $work->getWorkStatus() === "planning" ? "info" : ($work->getWorkStatus() === "doing" ? "warning" : "success" )
+?>
+
 <tr>
     <td class="p-0 text-center">
         <div class="custom-checkbox custom-control">
-            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
-            <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-<?= $work->getId() ?>">
+            <label for="checkbox-<?= $work->getId() ?>" class="custom-control-label">&nbsp;</label>
         </div>
     </td>
-    <td>Create a mobile app</td>
-    <td class="align-middle">
-        <div class="progress" data-height="4" data-toggle="tooltip" title="100%">
-            <div class="progress-bar bg-success" data-width="100"></div>
-        </div>
-    </td>
+    <td><?= $work->getWorkName() ?></td>
     <td>
-        <img alt="image" src="assets/img/avatar/avatar-5.png" class="rounded-circle" width="35" data-toggle="tooltip" title="Wildan Ahdian">
+        <?= $work->getWorkContent() ?>
     </td>
-    <td>2018-01-20</td>
+    <td><?= $work->getStartDate() ?></td>
+
+    <td><?= $work->getEndDate() ?></td>
     <td>
-        <div class="badge badge-success">Completed</div>
+        <div class="badge badge-<?= $statusClass?>"><?= $work->getWorkStatus() ?></div>
     </td>
     <td><a href="#" class="btn btn-secondary">Detail</a></td>
 </tr>

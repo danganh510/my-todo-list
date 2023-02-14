@@ -5,7 +5,8 @@ function autoloader($class) {
   // Create an array of directories to be autoloaded
   $autoLoad = array(
     'MyTodoList\Models' => __DIR__ . '/../apps/models/',
-    'MyTodoList\Controllers' => __DIR__ . '/../apps/controllers/'
+    'MyTodoList\Controllers' => __DIR__ . '/../apps/controllers/',
+    'MyTodoList\Reponsetories' => __DIR__ . '/../apps/repositories/',
   );
   
   $arrNameSpace = explode("\\",$class);
