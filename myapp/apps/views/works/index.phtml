@@ -1,6 +1,6 @@
 <?php
 
-
+use MyTodoList\Reponsetories\MyRepo;
 use MyTodoList\Reponsetories\WorksRepo;
 
 ?>
@@ -16,7 +16,6 @@ use MyTodoList\Reponsetories\WorksRepo;
 
         <div class="section-body">
             <h2 class="section-title">Table</h2>
-            <p class="section-lead">Example of some Bootstrap table components.</p>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -25,41 +24,39 @@ use MyTodoList\Reponsetories\WorksRepo;
                             <div class='w-100 mb-2'>
                                 <h4><?= isset($time) ? $time : "" ?></h4>
                             </div>
-                            <div class="card-header-form justify-content-start w-100">
-                                <form name="formSearch" class="d-flex justify-content-between" method="post">
-                                    <div class="form-group">
-                                        <input id="txtContent" name="txtContent" type="text" value="<?= isset($paramsSearch['txtContent']) ? $paramsSearch['txtContent'] : "" ?>" class="form-control" placeholder="name, content">
-                                    </div>
-                                    <div class="form-group d-flex">
-                                        <label>Date Range Picker</label>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <div class="input-group-text">
-                                                    <i class="fas fa-calendar"></i>
-                                                </div>
-                                            </div>
-                                            <input id="slcDateTime" name="slcDateTime" type="text" class="form-control daterange-cus">
+                            <div class="row ">
+                                <form name="formSearch">
+                                    <div class="form-group row">
+                                        <div class="col-sm-3">
+                                            <input id="txtContent" name="txtContent" value="<?= isset($paramsSearch['txtContent']) ? $paramsSearch['txtContent'] : "" ?>" type="text" class="form-control" placeholder="Name,Content,Id">
                                         </div>
+                                        <div class="col-sm-3">
+                                            <input id="slcStartDate" name="slcStartDate" value="<?= isset($paramsSearch['slcStartDate']) ? $paramsSearch['slcStartDate'] : "" ?>" type="date" class="form-control">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input id="slcEndDate" name="slcEndDate" value="<?= isset($paramsSearch['slcEndDate']) ? $paramsSearch['slcEndDate'] : "" ?>" type="date" class="form-control">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select id="slcStatus" name="slcStatus" class="form-control">
+                                                <option value="">All Status</option>
+                                                <?php
+                                                foreach (WorksRepo::ARR_STATUS as $status) :
+                                                    $selected = "";
+                                                    if (!empty($paramsSearch['work_status']) && $status == $paramsSearch['work_status']) {
+                                                        $selected = "selected";
+                                                    }
+                                                ?>
+                                                    <option <?= $selected ?> value="<?= $status  ?>"><?= ucfirst($status)  ?></option>
+                                                <?php endforeach ?>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
                                     </div>
-
-                                    <div class="form-group d-flex">
-                                        <label>Status</label>
-                                        <select id="slcStatus" name="slcStatus" class="form-control selectric">
-                                            <option value="">All status</option>
-                                            <?php
-                                            foreach (WorksRepo::ARR_STATUS as $status) :
-                                                $selected = "";
-                                                if (!empty($paramsSearch['slcStatus']) && $status == $paramsSearch['slcStatus']) {
-                                                    $selected = "selected";
-                                                }
-                                            ?>
-                                                <option <?= $selected ?> value="<?= $status  ?>"><?= ucfirst($status)  ?></option>
-                                            <?php endforeach ?>
-                                        </select>
-                                    </div>
-                                    <button type="submit">submit</button>
-
                                 </form>
+
+
+
+
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -86,15 +83,12 @@ use MyTodoList\Reponsetories\WorksRepo;
                                         }
                                     }
                                     ?>
-
-
-
                                 </table>
+                                <?= MyRepo::paging($totalPages, $currentPage, "") ?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
     </section>
 </div>

@@ -15,7 +15,7 @@ class Works
   private $work_insert_date;
   private $work_status;
 
-  public function __construct($id, $user_id, $work_name, $work_content, $work_start_date, $work_end_date, $work_status, $work_insert_date)
+  public function __construct($id, $user_id, $work_name, $work_content, $work_start_date, $work_end_date, $work_insert_date, $work_status)
   {
     $this->id = $id;
     $this->user_id = $user_id;
@@ -48,8 +48,16 @@ class Works
     $req->execute(array('id' => $id));
     $work = $req->fetch();
 
-    return new Works($work['id'], $work['user_id'], $work['work_name'], $work['work_content'], 
-    $work['work_start_date'], $work['work_end_date'], $work['work_insert_date'], $work['work_status']);
+    return new Works(
+      $work['id'],
+      $work['user_id'],
+      $work['work_name'],
+      $work['work_content'],
+      $work['work_start_date'],
+      $work['work_end_date'],
+      $work['work_insert_date'],
+      $work['work_status']
+    );
   }
   public static function findByQuery($query, $params)
   {
@@ -58,8 +66,16 @@ class Works
     $req->execute($params);
     $list = [];
     foreach ($req->fetchAll() as $work) {
-      $list[] = new Works($work['id'], $work['user_id'], $work['work_name'], $work['work_content'], $work['work_start_date'],
-       $work['work_end_date'], $work['work_insert_date'], $work['work_status']);
+      $list[] = new Works(
+        $work['id'],
+        $work['user_id'],
+        $work['work_name'],
+        $work['work_content'],
+        $work['work_start_date'],
+        $work['work_end_date'],
+        $work['work_insert_date'],
+        $work['work_status']
+      );
     }
 
     return $list;
@@ -70,6 +86,7 @@ class Works
     $req = $db->prepare($query);
     $req->execute($params);
     $count_record = [];
+    $count_record = 0;
     foreach ($req->fetchAll() as $work) {
       $count_record = $work['total'];
       break;
@@ -96,7 +113,7 @@ class Works
   {
     $db = Db::getInstance();
     $req = $db->prepare("INSERT INTO works (user_id, work_name, work_content, work_start_date, work_end_date, work_insert_date, work_status) VALUES (:user_id, :work_name, :work_content, :work_start_date, :work_end_date,:work_insert_date, :work_status)");
-    $req->execute(array(
+    $result = $req->execute(array(
       'user_id' => $this->user_id,
       'work_name' => $this->work_name,
       'work_content' => $this->work_content,
@@ -105,6 +122,7 @@ class Works
       'work_insert_date' => $this->work_insert_date,
       'work_status' => $this->work_status,
     ));
+    return $result;
   }
   public function update()
   {
@@ -125,7 +143,7 @@ class Works
   {
     $db = Db::getInstance();
     $req = $db->prepare("UPDATE works SET user_id = :user_id, work_name = :work_name, work_content = :work_content, work_start_date = :work_start_date, work_end_date = :work_end_date, work_insert_date = :work_insert_date, work_status = :work_status WHERE id = :id");
-    $req->execute(array(
+    $result = $req->execute(array(
       'id' => $this->id,
       'user_id' => $user_id,
       'work_name' => $work_name,
@@ -135,6 +153,7 @@ class Works
       'work_insert_date' => $work_insert_date,
       'work_status' => $work_status
     ));
+    return $result;
   }
 
   public function delete()

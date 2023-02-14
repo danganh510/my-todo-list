@@ -10,6 +10,10 @@ $routes = [
     'controller' => "works",
     'action' => "create"
   ],
+  "/my-works/update" => [
+    'controller' => "works",
+    'action' => "update"
+  ],
   "/login" => [
     'controller' => "login",
     'action' => "login"
