@@ -28,7 +28,7 @@ use MyTodoList\Reponsetories\WorksRepo;
                             <div class="card-header-form justify-content-start w-100">
                                 <form name="formSearch" class="d-flex justify-content-between" method="post">
                                     <div class="form-group">
-                                        <input id="txtContent" name="txtContent" type="text" class="form-control" placeholder="name, content">
+                                        <input id="txtContent" name="txtContent" type="text" value="<?= isset($paramsSearch['txtContent']) ? $paramsSearch['txtContent'] : "" ?>" class="form-control" placeholder="name, content">
                                     </div>
                                     <div class="form-group d-flex">
                                         <label>Date Range Picker</label>
@@ -46,9 +46,10 @@ use MyTodoList\Reponsetories\WorksRepo;
                                         <label>Status</label>
                                         <select id="slcStatus" name="slcStatus" class="form-control selectric">
                                             <option value="">All status</option>
-                                            <?php foreach (WorksRepo::ARR_STATUS as $status) :
+                                            <?php
+                                            foreach (WorksRepo::ARR_STATUS as $status) :
                                                 $selected = "";
-                                                if (!empty($paramSearch['slcStatus']) && $status == $paramSearch['slcStatus']) {
+                                                if (!empty($paramsSearch['slcStatus']) && $status == $paramsSearch['slcStatus']) {
                                                     $selected = "selected";
                                                 }
                                             ?>
@@ -79,23 +80,21 @@ use MyTodoList\Reponsetories\WorksRepo;
                                         <th>Action</th>
                                     </tr>
                                     <?php
-                                    if (!empty($myWorks)) :
-                                        foreach ($myWorks as $work) :  ?>
+                                    if (!empty($myWorks)) {
+                                        foreach ($myWorks as $work) {
+                                            $this->getView(['work' => $work], "works/component/works");
+                                        }
+                                    }
+                                    ?>
 
 
-                                            <?php $this->getView(['work' => $work], "works/component/works") ?>
-                                    <?php
-                                        endforeach;
-                                    endif; ?>
+
+                                </table>
                             </div>
-
-
-                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-</div>
-</section>
+    </section>
 </div>

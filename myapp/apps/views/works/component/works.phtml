@@ -14,9 +14,9 @@ $statusClass = $work->getWorkStatus() === "planning" ? "info" : ($work->getWorkS
     <td>
         <?= $work->getWorkContent() ?>
     </td>
-    <td><?= $work->getStartDate() ?></td>
+    <td><?= $work->getWorkStartDate() ?></td>
 
-    <td><?= $work->getEndDate() ?></td>
+    <td><?= $work->getWorkEndDate() ?></td>
     <td>
         <div class="badge badge-<?= $statusClass?>"><?= $work->getWorkStatus() ?></div>
     </td>
