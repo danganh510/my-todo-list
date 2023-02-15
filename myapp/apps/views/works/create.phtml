@@ -6,9 +6,9 @@
         <div class="section-header">
             <h1><?= $title ?></h1>
             <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="#">Works</a></div>
-                <div class="breadcrumb-item">Create</div>
+                <div class="breadcrumb-item active"><a href="/">Calender</a></div>
+                <div class="breadcrumb-item"><a href="/my-works">works manager</a></div>
+                <div class="breadcrumb-item"><?= $title ?></div>
             </div>
         </div>
 
@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="card-body">
-                            <form method="post" action="/my-works/create">
+                            <form method="post" action="/my-works/<?= strtolower($title) ?>?id=<?=$data['id'] ?>">
 
                                 <div class="form-group">
                                     <label for="work_name">Work Name</label>
@@ -55,7 +55,7 @@
                                         <?php endforeach ?>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Create</button>
+                                <button type="submit" class="btn btn-primary"><?= $title ?></button>
                             </form>
                         </div>
                     </div>

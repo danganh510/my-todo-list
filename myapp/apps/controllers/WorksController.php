@@ -6,7 +6,7 @@ use MyTodoList\Reponsetories\MyRepo;
 
 class WorksController extends ControllerBase
 {
-  function carlenderAction()
+  function calenderAction()
   {
     
     $sql = "SELECT * FROM works WHERE 1";
@@ -123,7 +123,7 @@ class WorksController extends ControllerBase
       $data = $_POST;
       $newWork = new Works(
         null,
-        1,
+        Session::get("auth")['id'],
         $data['work_name'],
         $data['work_content'],
         $data['work_start_date'],
@@ -159,6 +159,7 @@ class WorksController extends ControllerBase
       die();
     }
     $data = [
+      'id' => $work->getId(),
       'work_name' => $work->getWorkName(),
       'work_content' => $work->getWorkContent(),
       'work_start_date' => $work->getWorkStartDate(),

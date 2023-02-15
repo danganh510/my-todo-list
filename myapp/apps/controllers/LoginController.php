@@ -24,6 +24,7 @@ class LoginController extends ControllerBase
       //check valid
       $user = User::findByEmail($email);
       if (!$user) {
+        $messages['password'] = "Not found User";
         goto end;
       }
 
@@ -35,7 +36,8 @@ class LoginController extends ControllerBase
           'name' => $user->getUserName(),
           'email' => $user->getUserEmail(),
         ]);
-        header("Location: /my-works");
+        header("Location: /");
+        die();
       }
     }
     end:

@@ -2,11 +2,11 @@
 
 // Array to store the routes and the corresponding controller and action
 $routes = [
-  "/my-works" => [
+  "/" => [
     'controller' => "works",
-    'action' => "carlender"
+    'action' => "calender"
   ],
-  "/my-works/index" => [
+  "/my-works" => [
     'controller' => "works",
     'action' => "index"
   ],
@@ -35,6 +35,7 @@ if(isset($request_uri_export[1]) && $request_uri_export[1] == "public") {
   goto finishRoute;
 }
 
+
 // Check if the route is valid
 if (!isset($routes[$request_uri])) {
   // Set the controller and action name to the error page if the route is invalid
@@ -46,6 +47,8 @@ if (!isset($routes[$request_uri])) {
   $controller_name = $route['controller'];
   $action_name = $route['action'];
 }
+require_once('./config/sercurity.php');
+
 
 Session::set("controllerName",$controller_name);
 Session::set("actionName",$action_name);
@@ -74,7 +77,7 @@ $controller = new $controller_class();
 
 // Set the name of the action method
 $action_name = $action_name . "Action";
-ob_start();
+
 // Check if the action method exists
 if (!method_exists($controller, $action_name)) {
   die("Action not found: $action_name");
