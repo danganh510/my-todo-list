@@ -20,5 +20,5 @@ $statusClass = $work->getWorkStatus() === "planning" ? "info" : ($work->getWorkS
     <td>
         <div class="badge badge-<?= $statusClass?>"><?= $work->getWorkStatus() ?></div>
     </td>
-    <td><a href="#" class="btn btn-secondary">Detail</a></td>
+    <td><a href="/my-works/update?id=<?= $work->getId() ?>" class="btn btn-secondary">Update</a></td>
 </tr>

@@ -26,6 +26,11 @@ $request_uri = $_SERVER['REQUEST_URI'];
 // Remove the query string from the request URI
 $request_uri = explode("?", $request_uri)[0];
 
+$request_uri_export = explode("/",$request_uri);
+if(isset($request_uri_export[1]) && $request_uri_export[1] == "public") {
+  goto finishRoute;
+}
+
 // Check if the route is valid
 if (!isset($routes[$request_uri])) {
   // Set the controller and action name to the error page if the route is invalid
@@ -65,7 +70,7 @@ $controller = new $controller_class();
 
 // Set the name of the action method
 $action_name = $action_name . "Action";
-
+ob_start();
 // Check if the action method exists
 if (!method_exists($controller, $action_name)) {
   die("Action not found: $action_name");
@@ -73,3 +78,4 @@ if (!method_exists($controller, $action_name)) {
 
 // Call the action method
 $controller->$action_name();
+finishRoute:

@@ -12,3 +12,4 @@ RUN apt-get update && apt-get install -y \
   && docker-php-ext-install pdo_mysql \
   && docker-php-ext-install mysqli \
   && docker-php-ext-install zip
+RUN echo "output_buffering = On" > /usr/local/etc/php/conf.d/output_buffering.ini

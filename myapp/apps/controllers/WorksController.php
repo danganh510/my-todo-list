@@ -32,6 +32,7 @@ class WorksController extends ControllerBase
 
     if (!empty($_GET)) {
       $paramsSearch = $_GET;
+      
 
       if (isset($paramsSearch['slcStatus']) && $paramsSearch['slcStatus']) {
         $sql_search .= " AND work_status = :slcStatus ";
@@ -107,14 +108,16 @@ class WorksController extends ControllerBase
         goto end;
       }
       Session::set("result", "Save work success!");
-      header("Location: /my-works");
+      ob_end_flush(); 
+      die(header("Location: /my-works"));
     }
 
     end:
     $this->render([
       'data' => $data,
       'messages' => $messages,
-      'title' => "Create new work",
+      'title' => "Create",
+      'action' => 'my-works/create'
     ]);
   }
   function updateAction()
@@ -122,7 +125,8 @@ class WorksController extends ControllerBase
     $id = $_GET['id'];
     $work = Works::findById($id);
     if (!$work) {
-      header("Location: /works");
+      header("Location: /my-works");
+      die();
     }
     $data = [
       'work_name' => $work->getWorkName(),
@@ -148,46 +152,25 @@ class WorksController extends ControllerBase
         MyRepo::formatDateTime(time()),
         $data['work_status']
       );
+
       if (!$result) {
         $messages['update'] = "Can't update work!";
         goto end;
       }
       Session::set("result", "Update work success!");
       header("Location: /my-works");
+      die();
     }
 
     end:
     $this->render([
       'data' => $data,
       'messages' => $messages,
-      'title' => "Update work",
+      'title' => "Update",
+      'action' => 'my-works/update'
     ],
     'works/create'
   );
-  }
-
-  function editAction()
-  {
-    $id = $_GET['id'];
-    $work = Works::findById($id);
-    if (!$work) {
-      header("Location: /works");
-    }
-
-    if (!empty($_POST)) {
-      $work->setWorkName($_POST['work_name']);
-      $work->setWorkContent($_POST['work_content']);
-      $work->setWorkStartDate($_POST['start_date']);
-      $work->setWorkEndDate($_POST['end_date']);
-      $work->setWorkStatus($_POST['work_status']);
-      $work->save();
-      header("Location: /works");
-    }
-
-    $this->render([
-      'title' => "Edit work",
-      'work' => $work,
-    ]);
   }
 
   function deleteAction()

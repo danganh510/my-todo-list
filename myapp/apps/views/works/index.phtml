@@ -2,6 +2,9 @@
 
 use MyTodoList\Reponsetories\MyRepo;
 use MyTodoList\Reponsetories\WorksRepo;
+$params = $paramsSearch;
+unset($params['page']);
+$params = http_build_query($params);
 
 ?>
 <div class="main-content">
@@ -16,6 +19,9 @@ use MyTodoList\Reponsetories\WorksRepo;
 
         <div class="section-body">
             <h2 class="section-title">Table</h2>
+            <div class="pull-right">
+                <a type="submit" class="btn btn-primary pull-right" href="/my-works/create">Create</a>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -24,7 +30,7 @@ use MyTodoList\Reponsetories\WorksRepo;
                             <div class='w-100 mb-2'>
                                 <h4><?= isset($time) ? $time : "" ?></h4>
                             </div>
-                            <div class="row ">
+                            <div class="w-100 ">
                                 <form name="formSearch">
                                     <div class="form-group row">
                                         <div class="col-sm-3">
@@ -39,24 +45,12 @@ use MyTodoList\Reponsetories\WorksRepo;
                                         <div class="col-sm-2">
                                             <select id="slcStatus" name="slcStatus" class="form-control">
                                                 <option value="">All Status</option>
-                                                <?php
-                                                foreach (WorksRepo::ARR_STATUS as $status) :
-                                                    $selected = "";
-                                                    if (!empty($paramsSearch['work_status']) && $status == $paramsSearch['work_status']) {
-                                                        $selected = "selected";
-                                                    }
-                                                ?>
-                                                    <option <?= $selected ?> value="<?= $status  ?>"><?= ucfirst($status)  ?></option>
-                                                <?php endforeach ?>
+                                                <?= MyRepo::getComboboxStatusWork($paramsSearch['slcStatus']) ?>
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                                        <button type="submit" class="btn btn-primary">Search</button>
                                     </div>
                                 </form>
-
-
-
-
                             </div>
                         </div>
                         <div class="card-body p-0">
@@ -84,7 +78,10 @@ use MyTodoList\Reponsetories\WorksRepo;
                                     }
                                     ?>
                                 </table>
-                                <?= MyRepo::paging($totalPages, $currentPage, "") ?>
+                                <div class="pull-right">
+                                    <a class="btn btn-primary" >delete</a>
+                                </div>
+                                <?= MyRepo::paging($totalPages, $currentPage, $params) ?>
                             </div>
                         </div>
                     </div>
