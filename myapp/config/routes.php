@@ -4,6 +4,10 @@
 $routes = [
   "/my-works" => [
     'controller' => "works",
+    'action' => "carlender"
+  ],
+  "/my-works/index" => [
+    'controller' => "works",
     'action' => "index"
   ],
   "/my-works/create" => [

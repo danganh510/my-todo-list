@@ -2,90 +2,115 @@
 
 use MyTodoList\Reponsetories\MyRepo;
 use MyTodoList\Reponsetories\WorksRepo;
+
 $params = $paramsSearch;
 unset($params['page']);
 $params = http_build_query($params);
 
 ?>
-<div class="main-content">
-    <section class="section">
-        <div class="section-header">
-            <h1>Works</h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">Table</div>
+<div class="main-content px-0">
+    <div class="container">
+        <section class="section">
+            <div class="section-header">
+                <h1>Works</h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
+                    <div class="breadcrumb-item">Table</div>
+                </div>
             </div>
-        </div>
-
-        <div class="section-body">
-            <h2 class="section-title">Table</h2>
-            <div class="pull-right">
-                <a type="submit" class="btn btn-primary pull-right" href="/my-works/create">Create</a>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-
-                        <div class="card-header flex-column">
-                            <div class='w-100 mb-2'>
-                                <h4><?= isset($time) ? $time : "" ?></h4>
-                            </div>
-                            <div class="w-100 ">
-                                <form name="formSearch">
+            <div id='calendar'></div>
+            <div class="section-body">
+                <div class="d-flex justify-content-between align-items-center mb-4 px-4">
+                    <h2 class="section-title my-0">Table</h2>
+                    <div class="pull-right">
+                        <a type="submit" class="btn btn-primary pull-right px-4" href="/my-works/create">Create</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header flex-column">
+                                <div class='row w-100 mb-3'>
+                                    <div class="col-sm-3">
+                                        <a class="btn btn-action w-100 btn-primary d-flex align-items-center justify-content-center" href="/my-works?type=all">
+                                            All
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=today">
+                                            To day
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=week">
+                                            Week
+                                        </a>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=year">
+                                            Year
+                                        </a>
+                                    </div>
+                                </div>
+                                <form name="formSearch" class="w-100 pt-3 border-top" method="post">
                                     <div class="form-group row">
-                                        <div class="col-sm-3">
-                                            <input id="txtContent" name="txtContent" value="<?= isset($paramsSearch['txtContent']) ? $paramsSearch['txtContent'] : "" ?>" type="text" class="form-control" placeholder="Name,Content,Id">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <input id="slcStartDate" name="slcStartDate" value="<?= isset($paramsSearch['slcStartDate']) ? $paramsSearch['slcStartDate'] : "" ?>" type="date" class="form-control">
-                                        </div>
-                                        <div class="col-sm-3">
-                                            <input id="slcEndDate" name="slcEndDate" value="<?= isset($paramsSearch['slcEndDate']) ? $paramsSearch['slcEndDate'] : "" ?>" type="date" class="form-control">
+                                        <div class="col-sm-4">
+                                            <input id="txtContent" name="txtContent" value="<?= isset($paramsSearch['txtContent']) ? $paramsSearch['txtContent'] : "" ?>" type="text" class="form-control h-100" placeholder="Seach by Name, Content, ID">
                                         </div>
                                         <div class="col-sm-2">
-                                            <select id="slcStatus" name="slcStatus" class="form-control">
+                                            <input id="slcStartDate" name="slcStartDate" value="<?= isset($paramsSearch['slcStartDate']) ? $paramsSearch['slcStartDate'] : "" ?>" type="date" class="form-control h-100">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input id="slcEndDate" name="slcEndDate" value="<?= isset($paramsSearch['slcEndDate']) ? $paramsSearch['slcEndDate'] : "" ?>" type="date" class="form-control h-100">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select id="slcStatus" name="slcStatus" class="form-control h-100">
                                                 <option value="">All Status</option>
                                                 <?= MyRepo::getComboboxStatusWork($paramsSearch['slcStatus']) ?>
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Search</button>
+                                        <div class="col-sm-2">
+                                            <button type="submit" class="btn btn-primary w-100 h-100">Search</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
-                        </div>
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <tr>
-                                        <th>
-                                            <div class="custom-checkbox custom-control">
-                                                <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
-                                                <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
-                                            </div>
-                                        </th>
-                                        <th>Task Name</th>
-                                        <th>Content</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    <?php
-                                    if (!empty($myWorks)) {
-                                        foreach ($myWorks as $work) {
-                                            $this->getView(['work' => $work], "works/component/works");
+                            <div class="card-body p-0">
+                                <div class="table-responsive border-bottom">
+                                    <table class="table table-striped mb-0">
+                                        <tr>
+                                            <th>
+                                                <div class="custom-checkbox custom-control">
+                                                    <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
+                                                    <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                                                </div>
+                                            </th>
+                                            <th>Task Name</th>
+                                            <th>Content</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        <?php
+                                        if (!empty($myWorks)) {
+                                            foreach ($myWorks as $work) {
+                                                $this->getView(['work' => $work], "works/component/works");
+                                            }
                                         }
-                                    }
-                                    ?>
-                                </table>
+                                        ?>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="card-footer">
                                 <div class="pull-right">
-                                    <a class="btn btn-primary" >delete</a>
+                                    <a href="javascript:void(0)" class="btn btn-danger pull-right px-4 text-capitalize">delete</a>
                                 </div>
                                 <?= MyRepo::paging($totalPages, $currentPage, $params) ?>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-    </section>
+        </section>
+    </div>
 </div>

@@ -29,14 +29,14 @@ class MyRepo
         $html_page = "";
         for ($i = 1; $i <= $totalPages; $i++) {
             $html_page .= ' <li class="page-item ' . ($i == $currentPage ? 'active' : '') . ' ">
-            <a class="page-link" href="/my-works?page=' . $i . "&".$url_param.  '">' . $i . '</a>
+            <a class="page-link mx-2" href="/my-works?page=' . $i . "&".$url_param.  '">' . $i . '</a>
           </li>';
         }
         $html_pre_page = "";
    
         if($prePage) {
             $html_pre_page = '<li class="page-item">
-            <a class="page-link" href="?page=' . $prePage . "&".$url_param. '" aria-label="Previous">
+            <a class="page-link mx-2" href="?page=' . $prePage . "&".$url_param. '" aria-label="Previous">
               <span aria-hidden="true">&laquo;</span>
             </a>
           </li>';
@@ -44,23 +44,20 @@ class MyRepo
         $html_next_page = "";
         if($nextPage <= $totalPages) {
             $html_next_page = '<li class="page-item">
-            <a class="page-link" href="?page=' . $nextPage. "&".$url_param . '" aria-label="Next">
+            <a class="page-link mx-2" href="?page=' . $nextPage. "&".$url_param . '" aria-label="Next">
               <span aria-hidden="true">&raquo;</span>
             </a>
           </li>';
         }
        
        
-        $html = '<div class="card-body p-0">
-        <div class="pagination-container mt-3">
+        $html = '<div class="pagination-container mt-3">
           <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
+            <ul class="pagination justify-content-center mb-0">
               '. $html_pre_page. $html_page . $html_next_page. '
-               
-          </ul>
-        </nav>
-      </div>
-    </div>';
+            </ul>
+          </nav>
+      </div>';
         return $html;
     }
 }

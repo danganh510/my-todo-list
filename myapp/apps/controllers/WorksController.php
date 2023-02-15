@@ -6,7 +6,28 @@ use MyTodoList\Reponsetories\MyRepo;
 
 class WorksController extends ControllerBase
 {
-  // Hàm hiển thị kết quả ra cho người dùng.
+  function carlenderAction()
+  {
+    
+    $sql = "SELECT * FROM works WHERE 1";
+    $myWorks =  Works::findByQuery($sql, []);
+    $result = [];
+    foreach($myWorks as $work) {
+      $result['events'][] = [
+        "id"=> $work->getId(),
+        "title"=> $work->getWorkName(),
+        "start"=> $work->getWorkStartDate(),
+        "end"=> $work->getWorkEndDate(),
+        "color"=> $work->getWorkStatus() == "planning" ? "red" : ($work->getWorkStatus() == "doing" ? "blue" : "black"),
+        "description"=> $work->getWorkContent(),
+      ];
+
+    }
+  //  echo (json_encode($result));exit;
+    $this->render([
+      'myWorks' => $result
+    ]);
+  }
   function indexAction()
   {
     $myWorks = [];
@@ -25,14 +46,23 @@ class WorksController extends ControllerBase
     // Tính offset
     $offset = ($page - 1) * 5;
 
+
     $sql_total = "SELECT COUNT(*) as total FROM works WHERE 1";
     $sql_search = "";
     $sql = "SELECT * FROM works WHERE 1";
     $params = [];
 
-    if (!empty($_GET)) {
-      $paramsSearch = $_GET;
-      
+    if (!empty($_POST) || !empty($_GET)) {
+      $paramsSearch = $_POST;
+      if (empty($paramsSearch)) {
+        $paramsSearch = $_GET;
+      }
+      foreach ($paramsSearch as $key => $value) {
+        if (empty($value)) {
+          unset($paramsSearch[$key]);
+        }
+      }
+
 
       if (isset($paramsSearch['slcStatus']) && $paramsSearch['slcStatus']) {
         $sql_search .= " AND work_status = :slcStatus ";
@@ -55,7 +85,7 @@ class WorksController extends ControllerBase
     $sql_search .= " ORDER BY id DESC ";
     $sql_offset = "  LIMIT 5 OFFSET $offset";
 
-    $myWorks =  Works::findByQuery($sql . $sql_search .$sql_offset, $params);
+    $myWorks =  Works::findByQuery($sql . $sql_search . $sql_offset, $params);
 
     $totalRecords = Works::getTotalRecord($sql_total . $sql_search, $params);
 
@@ -93,7 +123,7 @@ class WorksController extends ControllerBase
       $data = $_POST;
       $newWork = new Works(
         null,
-        Session::get("auth")['id'],
+        1,
         $data['work_name'],
         $data['work_content'],
         $data['work_start_date'],
@@ -108,7 +138,7 @@ class WorksController extends ControllerBase
         goto end;
       }
       Session::set("result", "Save work success!");
-      ob_end_flush(); 
+      ob_end_flush();
       die(header("Location: /my-works"));
     }
 
@@ -163,14 +193,15 @@ class WorksController extends ControllerBase
     }
 
     end:
-    $this->render([
-      'data' => $data,
-      'messages' => $messages,
-      'title' => "Update",
-      'action' => 'my-works/update'
-    ],
-    'works/create'
-  );
+    $this->render(
+      [
+        'data' => $data,
+        'messages' => $messages,
+        'title' => "Update",
+        'action' => 'my-works/update'
+      ],
+      'works/create'
+    );
   }
 
   function deleteAction()

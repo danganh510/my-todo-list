@@ -27,15 +27,15 @@ class LoginController extends ControllerBase
         goto end;
       }
 
-      if (password_verify($password, $user->getUserPassword())) {
+      if (!password_verify($password, $user->getUserPassword())) {
         $messages['password'] = "Password is not correct";
       } else {
         Session::set('auth', [
           'id' => $user->getId(),
           'name' => $user->getUserName(),
           'email' => $user->getUserEmail(),
-
         ]);
+        header("Location: /my-works");
       }
     }
     end:
