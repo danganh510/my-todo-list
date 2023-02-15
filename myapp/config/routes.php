@@ -34,8 +34,8 @@ if(isset($request_uri_export[1]) && $request_uri_export[1] == "public") {
 // Check if the route is valid
 if (!isset($routes[$request_uri])) {
   // Set the controller and action name to the error page if the route is invalid
-  $controller_name = 'error';
-  $action_name = 'error';
+  $controller_name = 'notfound';
+  $action_name = 'notfound';
 } else {
   // Get the controller and action name from the routes array
   $route = $routes[$request_uri];

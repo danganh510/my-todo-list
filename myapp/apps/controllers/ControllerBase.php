@@ -10,10 +10,7 @@ class ControllerBase
   private $actionName;
   public function __construct()
   {
-    Session::set('auth',[
-      'id' => 1,
-      'name' => 'anh'
-    ]);
+
     $this->controllerName = Session::get("controllerName");
     $this->actionName = Session::get("actionName");
   }
