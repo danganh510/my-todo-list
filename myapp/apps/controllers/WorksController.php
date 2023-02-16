@@ -31,29 +31,49 @@ class WorksController extends ControllerBase
   {
     $myWorks = [];
     $paramsSearch = [];
-    $time = isset($_GET["time"])  ? $_GET["time"] : "";
-    if (!$time) {
-      $time = "all";
+    $params = [];
+    $type = isset($_GET["type"])  ? $_GET["type"] : "";
+    if (!$type) {
+      $type = "all";
     }
     $query_get_time = "";
+    $start_run_time = time();
 
-    switch ($time) {
+    switch ($type) {
       case "day":
-        $query_get_time .= " AND  work_end_date >= :date_now: AND work_end_date <= :date_now: ";
-        $params['txtContent'] = trim($paramsSearch['txtContent']);
+        //work that will be finished during the today
+
+        $date_start = MyRepo::formatDateTime($start_run_time);
+
+        $query_get_time .= " AND  work_end_date >= :date_searh_start ";
+        $params['date_searh_start'] = $date_start;
+
         break;
       case "week":
-        $query_get_time .= " AND  work_end_date >= :date_now: AND work_end_date <= :date_now: ";
-        $params['txtContent'] = trim($paramsSearch['txtContent']);
+        //work that will be finished during the week
+        $date_start = MyRepo::formatDateTime(strtotime("monday this week", $start_run_time));
+        $date_end = MyRepo::formatDateTime(strtotime("sunday this week", $start_run_time));
+        $query_get_time .= " AND  (work_end_date >= :date_searh_start AND work_end_date <= :date_searh_end) ";
+        $params['date_searh_start'] = $date_start;
+        $params['date_searh_end'] = $date_end;
         break;
       case "month":
-        $query_get_time .= " AND  work_end_date >= :date_now: AND work_end_date <= :date_now: ";
-        $params['txtContent'] = trim($paramsSearch['txtContent']);
+        //work that will be finished during the month
+        $date_start = date('Y-m-01');
+        $date_end = date('Y-m-t');
+        $query_get_time .= " AND  work_end_date >= :date_searh_start: AND work_end_date <= :date_searh_end ";
+        $params['date_searh_start'] = $date_start;
+        $params['date_searh_end'] = $date_end;
 
         break;
       case "year":
-        $query_get_time .= " AND  work_end_date >= :date_now: AND work_end_date <= :date_now: ";
-        $params['txtContent'] = trim($paramsSearch['txtContent']);
+        //work that will be finished during the year
+
+        $date_start = date('Y-01-01');
+        $date_end = date('Y-12-31');
+        $query_get_time .= " AND  work_end_date >= :date_searh_start: AND work_end_date <= :date_searh_end ";
+        $params['date_searh_start'] = $date_start;
+        $params['date_searh_end'] = $date_end;
 
         break;
       default:
@@ -73,7 +93,7 @@ class WorksController extends ControllerBase
     $sql_total = "SELECT COUNT(*) as total FROM works WHERE 1";
     $sql_search = "";
     $sql = "SELECT * FROM works WHERE 1";
-    $params = [];
+
 
     if (!empty($_POST) || !empty($_GET)) {
       $paramsSearch = $_POST;
@@ -87,30 +107,38 @@ class WorksController extends ControllerBase
       }
 
 
+      //search by status
       if (isset($paramsSearch['slcStatus']) && $paramsSearch['slcStatus']) {
         $sql_search .= " AND work_status = :slcStatus ";
         $params['slcStatus'] = trim($paramsSearch['slcStatus']);
       }
+
+      //search start date 
       if (isset($paramsSearch['slcStartDate']) && $paramsSearch['slcStartDate']) {
         $sql_search .= " AND work_start_date >= :slcStartDate ";
         $params['slcStartDate'] = trim($paramsSearch['slcStartDate']);
       }
+
+      //search end date 
       if (isset($paramsSearch['slcEndDate']) && $paramsSearch['slcEndDate']) {
         $sql_search .= " AND work_end_date <= :slcEndDate ";
         $params['slcEndDate'] = trim($paramsSearch['slcEndDate']);
       }
+
+      //search nmae,content,id
       if (isset($paramsSearch['txtContent']) && $paramsSearch['txtContent']) {
-        $sql_search .= " AND ( work_name like CONCAT('%',:txtContent,'%') OR work_content like CONCAT('%',:txtContent,'%'))";
+        $sql_search .= " AND ( work_name like CONCAT('%',:txtContent,'%') OR work_content like CONCAT('%',:txtContent,'%')) OR id = :txtContent ";
         $params['txtContent'] = trim($paramsSearch['txtContent']);
       }
     }
+    $sql_search .= $query_get_time;
     // Thêm LIMIT và OFFSET vào truy vấn SQL
     $sql_search .= " ORDER BY id DESC ";
-    $sql_offset = "  LIMIT 5 OFFSET $offset";
+    $sql_offset = "  LIMIT 5 OFFSET $offset ";
 
-    $myWorks =  Works::findByQuery($sql . $sql_search . $query_get_time . $sql_offset, $params);
+    $myWorks =  Works::findByQuery($sql . $sql_search  . $sql_offset, $params);
 
-    $totalRecords = Works::getTotalRecord($sql_total . $query_get_time . $sql_search, $params);
+    $totalRecords = Works::getTotalRecord($sql_total . $sql_search, $params);
 
     // Tính tổng số trang
     $totalPages = ceil($totalRecords / 5);
@@ -132,7 +160,7 @@ class WorksController extends ControllerBase
     $this->render([
       'title' => "works",
       'myWorks' => $myWorks,
-      'time' => $time,
+      'type' => $type,
       'paramsSearch' => $paramsSearch,
       'currentPage' => $page,
       'totalPages' => $totalPages,
@@ -145,12 +173,15 @@ class WorksController extends ControllerBase
     $data = [];
     if (!empty($_POST)) {
 
+      //check valid field post
       $this->checkValidPost($messages);
 
       if (!empty($messages)) {
         goto end;
       }
-      $data = $_POST;
+      foreach ($_POST as $key => $post) {
+        $data[$key] = trim($post);
+      }
       $newWork = new Works(
         null,
         Session::get("auth")['id'],
@@ -202,11 +233,16 @@ class WorksController extends ControllerBase
     ];
     $messages = [];
     if (!empty($_POST)) {
+
+      //check valid field post
       $this->checkValidPost($messages);
+      
       if (!empty($messages)) {
         goto end;
       }
-      $data = $_POST;
+      foreach ($_POST as $key => $post) {
+        $data[$key] = trim($post);
+      }
 
       $result = $work->updateAll(
         Session::get("auth")['id'],
@@ -245,7 +281,7 @@ class WorksController extends ControllerBase
 
   function deleteAction()
   {
-    
+
     $messages = [];
     if (empty($_POST['item'])) {
       $messages = [
@@ -278,7 +314,7 @@ class WorksController extends ControllerBase
     }
 
 
-   
+
     end:
     Session::set("result", $messages);
     header("Location: /my-works");

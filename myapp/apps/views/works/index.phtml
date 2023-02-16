@@ -40,22 +40,22 @@ $params = http_build_query($params);
                                 <div class="card-header flex-column">
                                     <div class='row w-100 mb-3'>
                                         <div class="col-sm-3">
-                                            <a class="btn btn-action w-100 btn-primary d-flex align-items-center justify-content-center" href="/my-works?type=all">
+                                            <a class="btn btn-action w-100 <?= $type == "all" ? "btn-primary"  : "bg-light"?> d-flex align-items-center justify-content-center" href="/my-works?type=all">
                                                 All
                                             </a>
                                         </div>
                                         <div class="col-sm-3">
-                                            <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=today">
-                                                To day
+                                            <a class="btn btn-action <?= $type == "day" ? "btn-primary"  : "bg-light"?> text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=day">
+                                                Today
                                             </a>
                                         </div>
                                         <div class="col-sm-3">
-                                            <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=week">
+                                            <a class="btn btn-action <?= $type == "week" ? "btn-primary"  : "bg-light"?> text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=week">
                                                 Week
                                             </a>
                                         </div>
                                         <div class="col-sm-3">
-                                            <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=year">
+                                            <a class="btn btn-action <?= $type == "year" ? "btn-primary"  : "bg-light"?> text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=year">
                                                 Year
                                             </a>
                                         </div>

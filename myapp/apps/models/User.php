@@ -71,7 +71,7 @@ class User {
 
   public static function findByEmail($email) {
     $db = DB::getInstance();
-    $statement = $db->prepare('SELECT * FROM user WHERE user_email = :email');
+    $statement = $db->prepare('SELECT * FROM user WHERE user_email = :email AND user_active = "Y"');
     $statement->bindParam(':email', $email);
     $statement->execute();
 
