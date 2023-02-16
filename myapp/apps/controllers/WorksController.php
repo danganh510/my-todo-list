@@ -61,7 +61,7 @@ class WorksController extends ControllerBase
         //work that will be finished during the month
         $date_start = date('Y-m-01');
         $date_end = date('Y-m-t');
-        $query_get_time .= " AND  work_end_date >= :date_searh_start: AND work_end_date <= :date_searh_end ";
+        $query_get_time .= " AND  work_end_date >= :date_searh_start AND work_end_date <= :date_searh_end ";
         $params['date_searh_start'] = $date_start;
         $params['date_searh_end'] = $date_end;
         break;
