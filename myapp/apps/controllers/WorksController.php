@@ -64,17 +64,6 @@ class WorksController extends ControllerBase
         $query_get_time .= " AND  work_end_date >= :date_searh_start: AND work_end_date <= :date_searh_end ";
         $params['date_searh_start'] = $date_start;
         $params['date_searh_end'] = $date_end;
-
-        break;
-      case "year":
-        //work that will be finished during the year
-
-        $date_start = date('Y-01-01');
-        $date_end = date('Y-12-31');
-        $query_get_time .= " AND  work_end_date >= :date_searh_start: AND work_end_date <= :date_searh_end ";
-        $params['date_searh_start'] = $date_start;
-        $params['date_searh_end'] = $date_end;
-
         break;
       default:
         break;
@@ -236,7 +225,7 @@ class WorksController extends ControllerBase
 
       //check valid field post
       $this->checkValidPost($messages);
-      
+
       if (!empty($messages)) {
         goto end;
       }
