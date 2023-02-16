@@ -6,7 +6,8 @@ $statusClass = $work->getWorkStatus() === "planning" ? "info" : ($work->getWorkS
 <tr>
     <td class="p-0 text-center">
         <div class="custom-checkbox custom-control">
-            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-<?= $work->getId() ?>">
+            <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input check" name="item[]"
+             value="<?= $work->getId() ?>" id="checkbox-<?= $work->getId() ?>">
             <label for="checkbox-<?= $work->getId() ?>" class="custom-control-label">&nbsp;</label>
         </div>
     </td>

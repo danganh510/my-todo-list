@@ -15,44 +15,49 @@ $params = http_build_query($params);
                 <h1>Works</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="/">Calender</a></div>
-               
+
                 </div>
             </div>
             <div id='calendar'></div>
             <div class="section-body">
-                <div class="d-flex justify-content-between align-items-center mb-4 px-4">
+                <div class="d-flex justify-content-between align-items-center mb-3 px-4">
                     <h2 class="section-title my-0">Table</h2>
                     <div class="pull-right">
                         <a type="submit" class="btn btn-primary pull-right px-4" href="/my-works/create">Create</a>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header flex-column">
-                                <div class='row w-100 mb-3'>
-                                    <div class="col-sm-3">
-                                        <a class="btn btn-action w-100 btn-primary d-flex align-items-center justify-content-center" href="/my-works?type=all">
-                                            All
-                                        </a>
+                <div class="bg-danger rounded p-2 mb-4">
+                    <p class="text-white mb-0">Created Successfull</p>
+                </div>
+
+                <form name="formSearch" id="formSearch" class="w-100 pt-3 border-top" method="post">
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header flex-column">
+                                    <div class='row w-100 mb-3'>
+                                        <div class="col-sm-3">
+                                            <a class="btn btn-action w-100 btn-primary d-flex align-items-center justify-content-center" href="/my-works?type=all">
+                                                All
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=today">
+                                                To day
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=week">
+                                                Week
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=year">
+                                                Year
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=today">
-                                            To day
-                                        </a>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=week">
-                                            Week
-                                        </a>
-                                    </div>
-                                    <div class="col-sm-3">
-                                        <a class="btn btn-action bg-light text-dark w-100 btn-social d-flex align-items-center justify-content-center" href="/my-works?type=year">
-                                            Year
-                                        </a>
-                                    </div>
-                                </div>
-                                <form name="formSearch" class="w-100 pt-3 border-top" method="post">
                                     <div class="form-group row">
                                         <div class="col-sm-4">
                                             <input id="txtContent" name="txtContent" value="<?= isset($paramsSearch['txtContent']) ? $paramsSearch['txtContent'] : "" ?>" type="text" class="form-control h-100" placeholder="Seach by Name, Content, ID">
@@ -73,45 +78,125 @@ $params = http_build_query($params);
                                             <button type="submit" class="btn btn-primary w-100 h-100">Search</button>
                                         </div>
                                     </div>
-                                </form>
-                            </div>
-                            <div class="card-body p-0">
-                                <div class="table-responsive border-bottom">
-                                    <table class="table table-striped mb-0">
-                                        <tr>
-                                            <th>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
-                                                    <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
-                                                </div>
-                                            </th>
-                                            <th>Task Name</th>
-                                            <th>Content</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        <?php
-                                        if (!empty($myWorks)) {
-                                            foreach ($myWorks as $work) {
-                                                $this->getView(['work' => $work], "works/component/works");
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive border-bottom">
+                                        <table class="table table-striped mb-0">
+                                            <tr>
+                                                <th>
+                                                    <div class="custom-checkbox custom-control">
+                                                        <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input checkmark_checkbox" id="checkboxAll">
+                                                        <label for="checkboxAll" class="custom-control-label">&nbsp;</label>
+                                                    </div>
+                                                </th>
+                                                <th>Task Name</th>
+                                                <th>Content</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            <?php
+                                            if (!empty($myWorks)) {
+                                                foreach ($myWorks as $work) {
+                                                    $this->getView(['work' => $work], "works/component/works");
+                                                }
                                             }
-                                        }
-                                        ?>
-                                    </table>
+                                            ?>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-footer">
-                                <div class="pull-right">
-                                    <a href="javascript:void(0)" class="btn btn-danger pull-right px-4 text-capitalize">delete</a>
+                                <div class="card-footer">
+                                    <div class="pull-right">
+                                        <div class="col-md-6 ">
+                                            <label for="slcAction">With Selected:</label>
+                                            <select class="form-control" id="slcAction" name="slcAction" style="display: inline-block;width: 40%">
+                                                <option value="" selected>Please select</option>
+                                                <option value="drop">Drop</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <?= MyRepo::paging($totalPages, $currentPage, $params) ?>
                                 </div>
-                                <?= MyRepo::paging($totalPages, $currentPage, $params) ?>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
+
         </section>
     </div>
 </div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header justify-content-between align-items-center p-4">
+                <h4 class="modal-title text-danger">Warning!</h4>
+                <button type="button" class="close text-danger m-0 p-1" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="id" name="id" />
+                <p class="content-warning"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-close" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary delete-all text-white">Yes</a>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script>
+    commands.push(function() {
+        $('#checkboxAll').on('change', function() {
+            $('.check').prop("checked", $(this).prop('checked'));
+        });
+        var total_checkbox = 0;
+        $('.check').each(function() {
+            total_checkbox++;
+        });
+        $('.check').change(function() {
+            var count = 0;
+            $('.check').each(function(index, item) {
+                if ($(item).is(':checked')) count++;
+            });
+            if (count == total_checkbox) {
+                $('#checkboxAll').prop('checked', true);
+                count = 0;
+            } else {
+                $('#checkboxAll').prop('checked', false);
+            }
+        });
+        $('#slcAction').on('change', function() {
+            var value = $(this).val();
+            var checked = [];
+            if (value == "drop") {
+                $('#myModal').modal("show");
+                $("input[name='item[]']:checked").each(function() {
+                    checked.push($(this).val());
+                });
+                var location_country_code = $("#slcLocationCountry").val();
+                if (location_country_code == 'all') {
+                    $('.content-warning').text('Please choose one location country.');
+                    $('.delete-all').hide();
+                } else if (checked.length === 0) {
+                    $('.content-warning').text('Please choose at least one item.');
+                    $('.delete-all').hide();
+                } else if (checked.length === 1) {
+                    $('.content-warning').text('Are you sure to remove ID = ' + checked[0] + '?');
+                    $('.delete-all').show();
+                } else {
+                    $('.content-warning').text('Are you sure to remove IDs selected?');
+                    $('.delete-all').show();
+                }
+            }
+        });
+        $("#myModal").on("hidden.bs.modal", function() {
+            $('#slcAction').val('');
+        });
+        $(".delete-all").on('click', function() {
+            $('#formSearch').prop('action', '/my-works/delete');
+            $('#formSearch').submit();
+        });
+    });
+</script>

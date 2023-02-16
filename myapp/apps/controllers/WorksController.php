@@ -8,22 +8,21 @@ class WorksController extends ControllerBase
 {
   function calenderAction()
   {
-    
+
     $sql = "SELECT * FROM works WHERE 1";
     $myWorks =  Works::findByQuery($sql, []);
     $result = [];
-    foreach($myWorks as $work) {
+    foreach ($myWorks as $work) {
       $result['events'][] = [
-        "id"=> $work->getId(),
-        "title"=> $work->getWorkName(),
-        "start"=> $work->getWorkStartDate(),
-        "end"=> $work->getWorkEndDate(),
-        "color"=> $work->getWorkStatus() == "planning" ? "red" : ($work->getWorkStatus() == "doing" ? "blue" : "black"),
-        "description"=> $work->getWorkContent(),
+        "id" => $work->getId(),
+        "title" => $work->getWorkName(),
+        "start" => $work->getWorkStartDate(),
+        "end" => $work->getWorkEndDate(),
+        "color" => $work->getWorkStatus() == "planning" ? "red" : ($work->getWorkStatus() == "doing" ? "blue" : "black"),
+        "description" => $work->getWorkContent(),
       ];
-
     }
-  //  echo (json_encode($result));exit;
+    //  echo (json_encode($result));exit;
     $this->render([
       'myWorks' => $result
     ]);
@@ -34,7 +33,31 @@ class WorksController extends ControllerBase
     $paramsSearch = [];
     $time = isset($_GET["time"])  ? $_GET["time"] : "";
     if (!$time) {
-      $time = "All";
+      $time = "all";
+    }
+    $query_get_time = "";
+
+    switch ($time) {
+      case "day":
+        $query_get_time .= " AND  work_end_date >= :date_now: AND work_end_date <= :date_now: ";
+        $params['txtContent'] = trim($paramsSearch['txtContent']);
+        break;
+      case "week":
+        $query_get_time .= " AND  work_end_date >= :date_now: AND work_end_date <= :date_now: ";
+        $params['txtContent'] = trim($paramsSearch['txtContent']);
+        break;
+      case "month":
+        $query_get_time .= " AND  work_end_date >= :date_now: AND work_end_date <= :date_now: ";
+        $params['txtContent'] = trim($paramsSearch['txtContent']);
+
+        break;
+      case "year":
+        $query_get_time .= " AND  work_end_date >= :date_now: AND work_end_date <= :date_now: ";
+        $params['txtContent'] = trim($paramsSearch['txtContent']);
+
+        break;
+      default:
+        break;
     }
 
     // Lấy trang hiện tại
@@ -85,9 +108,9 @@ class WorksController extends ControllerBase
     $sql_search .= " ORDER BY id DESC ";
     $sql_offset = "  LIMIT 5 OFFSET $offset";
 
-    $myWorks =  Works::findByQuery($sql . $sql_search . $sql_offset, $params);
+    $myWorks =  Works::findByQuery($sql . $sql_search . $query_get_time . $sql_offset, $params);
 
-    $totalRecords = Works::getTotalRecord($sql_total . $sql_search, $params);
+    $totalRecords = Works::getTotalRecord($sql_total . $query_get_time . $sql_search, $params);
 
     // Tính tổng số trang
     $totalPages = ceil($totalRecords / 5);
@@ -99,6 +122,12 @@ class WorksController extends ControllerBase
     if ($page < 1) {
       $page = 1;
     }
+    $messages = [];
+    //checking messages:
+    if (Session::get("result")) {
+      $messages = Session::get("result");
+      Session::delete("result");
+    }
 
     $this->render([
       'title' => "works",
@@ -106,7 +135,8 @@ class WorksController extends ControllerBase
       'time' => $time,
       'paramsSearch' => $paramsSearch,
       'currentPage' => $page,
-      'totalPages' => $totalPages
+      'totalPages' => $totalPages,
+      'messages' => $messages
     ]);
   }
   function createAction()
@@ -138,8 +168,8 @@ class WorksController extends ControllerBase
         goto end;
       }
       Session::set("result", "Save work success!");
-      ob_end_flush();
-      die(header("Location: /my-works"));
+      header("Location: /my-works");
+      die();
     }
 
     end:
@@ -147,7 +177,7 @@ class WorksController extends ControllerBase
       'data' => $data,
       'messages' => $messages,
       'title' => "Create",
-      'action' => 'my-works/create'
+      'action' => 'create'
     ]);
   }
   function updateAction()
@@ -199,29 +229,52 @@ class WorksController extends ControllerBase
         'data' => $data,
         'messages' => $messages,
         'title' => "Update",
-        'action' => 'my-works/update?id='.$data['id']
+        'action' => 'update?id=' . $data['id']
       ],
-      'works/update'
+      'works/create'
     );
   }
 
   function deleteAction()
   {
-    $id = $_GET['id'];
-    $work = Works::findById($id);
-    if (!$work) {
-      header("Location: /works");
+    
+    $messages = [];
+    if (empty($_POST['item'])) {
+      $messages = [
+        'status' => 'fail',
+        'message' => 'Has error'
+      ];
+      goto end;
+    }
+    $arrId = $_POST['item'];
+    if (empty($arrId)) {
+      $messages = [
+        'status' => 'fail',
+        'message' => 'please check item'
+      ];
+      goto end;
+    }
+    foreach ($arrId as $id) {
+      $work = Works::findById($id);
+      if (!$work->delete()) {
+        $messages = [
+          'status' => 'fail',
+          'message' => 'Delete false'
+        ];
+        goto end;
+      }
+      $messages = [
+        'status' => 'success',
+        'message' => 'Delete success'
+      ];
     }
 
-    if (!empty($_POST)) {
-      $work->delete();
-      header("Location: /works");
-    }
 
-    $this->render([
-      'title' => "Delete work",
-      'work' => $work,
-    ]);
+   
+    end:
+    Session::set("result", $messages);
+    header("Location: /my-works");
+    die();
   }
   private function checkValidPost(&$messages)
   {

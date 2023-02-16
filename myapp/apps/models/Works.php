@@ -160,7 +160,8 @@ class Works
   {
     $db = Db::getInstance();
     $req = $db->prepare('DELETE FROM works WHERE id = :id');
-    $req->execute(array('id' => $this->id));
+    $result = $req->execute(array('id' => $this->id));
+    return $result;
   }
 
   public function getId()

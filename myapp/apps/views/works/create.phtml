@@ -3,71 +3,72 @@
   use MyTodoList\Reponsetories\MyRepo;
 
 ?>
-<div class="main-content">
-    <section class="section">
-        <div class="section-header">
-            <h1><?= $title ?></h1>
-            <div class="section-header-breadcrumb">
-                <div class="breadcrumb-item active"><a href="/">Calender</a></div>
-                <div class="breadcrumb-item"><a href="/my-works">works manager</a></div>
-                <div class="breadcrumb-item"><?= $title ?></div>
+<div class="main-content px-0">
+    <div class="container">
+        <section class="section">
+            <div class="section-header">
+                <h1><?= $title ?></h1>
+                <div class="section-header-breadcrumb">
+                    <div class="breadcrumb-item active"><a href="/">Calender</a></div>
+                    <div class="breadcrumb-item"><a href="/my-works">works manager</a></div>
+                    <div class="breadcrumb-item"><?= $title ?></div>
+                </div>
             </div>
-        </div>
 
-        <div class="section-body">
+            <div class="section-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
 
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
+                            <div class="card-header">
+                                <h4>Work Details</h4>
+                            </div>
 
-                        <div class="card-header">
-                            <h4>Work Details</h4>
-                        </div>
+                            <div class="card-body">
+                                <form name="submit-work" method="post" action="<?=  $action ?>">
 
-                        <div class="card-body">
-                            <form name="submit-work" method="post" action="<?=  $action ?>">
+                                    <div class="form-group">
+                                        <label for="work_name">Work Name</label>
+                                        <input type="text" value="<?= isset($data['work_name'])  ? $data['work_name'] : "" ?>" id="work_name" name="work_name" class="form-control" >
+                                        <small class="text-danger msg-name"><?= isset($messages['work_name'])  ? $messages['work_name'] : "" ?></small>
 
-                                <div class="form-group">
-                                    <label for="work_name">Work Name</label>
-                                    <input type="text" value="<?= isset($data['work_name'])  ? $data['work_name'] : "" ?>" id="work_name" name="work_name" class="form-control" >
-                                    <small class="text-danger msg-name"><?= isset($messages['work_name'])  ? $messages['work_name'] : "" ?></small>
-
-                                </div>
-                                <div class="form-group">
-                                    <label for="work_content">Work Content</label>
-                                    <textarea id="work_content" name="work_content" class="form-control"><?= isset($data['work_name'])  ? $data['work_name'] : "" ?></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="work_start_date">Work Start Date</label>
-                                    <input type="datetime-local" id="work_start_date" name="work_start_date" value="<?= isset($data['work_start_date'])  ? $data['work_start_date'] : "" ?>" class="form-control datepicker" >
-                                    <small class="text-danger msg-start-date"><?= isset($messages['work_start_date'])  ? $messages['work_start_date'] : "" ?></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="work_end_date">Work End Date</label>
-                                    <input type="datetime-local"  id="work_end_date" name="work_end_date" value="<?= isset($data['work_end_date'])  ? $data['work_end_date'] : "" ?>" class="form-control datepicker" >
-                                    <small class="text-danger msg-end-date"><?= isset($messages['work_end_date'])  ? $messages['work_end_date'] : "" ?></small>
-                                </div>
-                                <div class="form-group">
-                                    <label for="work_status">Work Status</label>
-                                    <select id="work_status" name="work_status" class="form-control">
-                                    <?= MyRepo::getComboboxStatusWork($data['work_status']) ?>
-                                    </select>
-                                </div>
-                                <button type="submit" id="submitWork" class="btn btn-primary"><?= $title ?></button>
-                            </form>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="work_content">Work Content</label>
+                                        <textarea id="work_content" name="work_content" class="form-control"><?= isset($data['work_name'])  ? $data['work_name'] : "" ?></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="work_start_date">Work Start Date</label>
+                                        <input type="datetime-local" id="work_start_date" name="work_start_date" value="<?= isset($data['work_start_date'])  ? $data['work_start_date'] : "" ?>" class="form-control datepicker" >
+                                        <small class="text-danger msg-start-date"><?= isset($messages['work_start_date'])  ? $messages['work_start_date'] : "" ?></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="work_end_date">Work End Date</label>
+                                        <input type="datetime-local"  id="work_end_date" name="work_end_date" value="<?= isset($data['work_end_date'])  ? $data['work_end_date'] : "" ?>" class="form-control datepicker" >
+                                        <small class="text-danger msg-end-date"><?= isset($messages['work_end_date'])  ? $messages['work_end_date'] : "" ?></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="work_status">Work Status</label>
+                                        <select id="work_status" name="work_status" class="form-control">
+                                        <?= MyRepo::getComboboxStatusWork($data['work_status']) ?>
+                                        </select>
+                                    </div>
+                                    <button type="submit" id="submitWork" class="btn btn-primary"><?= $title ?></button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </div>
 </div>
 <script>
     commands.push(function() {
         $('form[name=submit-work]').submit(function (event) {
             var valid = true;
             if ($('input[name=work_name]').val() == '') {
-                $('.msg-name').text('Name field is required.');
+                $('.msg-name').text('Name field is required.1');
                 $('#work_name').addClass("border-red");
                 valid = false;
             } else {
