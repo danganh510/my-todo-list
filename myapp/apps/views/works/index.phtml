@@ -26,9 +26,11 @@ $params = http_build_query($params);
                         <a type="submit" class="btn btn-primary pull-right px-4" href="/my-works/create">Create</a>
                     </div>
                 </div>
-                <div class="bg-danger rounded p-2 mb-4">
-                    <p class="text-white mb-0">Created Successfull</p>
+                <?php if (isset($messages['status'])) : ?>
+                <div class="bg-<?= $messages['status'] ?> rounded p-2 mb-4">
+                    <p class="text-white mb-0"><?= $messages['message'] ?></p>
                 </div>
+                <?php endif;?>
 
                 <form name="formSearch" id="formSearch" class="w-100 pt-3 border-top" method="post">
 

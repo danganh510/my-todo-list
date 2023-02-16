@@ -167,7 +167,11 @@ class WorksController extends ControllerBase
         $messages['update'] = "Can't save work!";
         goto end;
       }
-      Session::set("result", "Save work success!");
+      $result = [
+        'status' => "success",
+        'message' => "Save work success!"
+      ];
+      Session::set("result", $result);
       header("Location: /my-works");
       die();
     }
@@ -218,7 +222,11 @@ class WorksController extends ControllerBase
         $messages['update'] = "Can't update work!";
         goto end;
       }
-      Session::set("result", "Update work success!");
+      $result = [
+        'status' => "success",
+        'message' => "Update work success!"
+      ];
+      Session::set("result", $result);
       header("Location: /my-works");
       die();
     }
@@ -241,7 +249,7 @@ class WorksController extends ControllerBase
     $messages = [];
     if (empty($_POST['item'])) {
       $messages = [
-        'status' => 'fail',
+        'status' => 'danger',
         'message' => 'Has error'
       ];
       goto end;
@@ -249,7 +257,7 @@ class WorksController extends ControllerBase
     $arrId = $_POST['item'];
     if (empty($arrId)) {
       $messages = [
-        'status' => 'fail',
+        'status' => 'danger',
         'message' => 'please check item'
       ];
       goto end;
@@ -258,7 +266,7 @@ class WorksController extends ControllerBase
       $work = Works::findById($id);
       if (!$work->delete()) {
         $messages = [
-          'status' => 'fail',
+          'status' => 'danger',
           'message' => 'Delete false'
         ];
         goto end;
