@@ -71,26 +71,31 @@ Upload to server:
 -change file default.conf
 -open port 8080, import mydb.sql
 -run: port 80
+----
+-account login: 
+user email: example@gmail.com 
+password: 123456
+----
 
 //file default.conf
 server {
     listen 80;
     listen [::]:80;
-    server_name 54.254.220.181;
+    server_name 13.228.170.225;
 
     root /var/www/html;
-    index index.php;
+    index index.php index.html index.htm;
 
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
+       location / {
+        try_files $uri $uri/ /index.php?$args;
     }
 
-      location ~ \.php$ {
+       location ~ \.php$ {
         include snippets/fastcgi-php.conf;
         fastcgi_pass php:9000;
     }
 
-     location ~ /\.ht {
+ location ~ /\.ht {
         deny all;
     }
 }
