@@ -18,6 +18,10 @@ $routes = [
     'controller' => "works",
     'action' => "update"
   ],
+  "/my-works/delete" => [
+    'controller' => "works",
+    'action' => "delete"
+  ],
   "/login" => [
     'controller' => "login",
     'action' => "login"

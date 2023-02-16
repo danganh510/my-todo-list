@@ -25,10 +25,21 @@ class Session
             return false;
         }
     }
+    public static function delete($key)
+    {
+        // Get a session variable
+        if (isset($_SESSION[$key])) {
+           unset($_SESSION[$key]);
+           return true;
+        } else {
+            return false;
+        }
+    }
 
     public static function destroy()
     {
         // Destroy the current session
         session_destroy();
     }
+
 }
