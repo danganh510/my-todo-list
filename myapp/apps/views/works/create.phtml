@@ -3,6 +3,11 @@
   use MyTodoList\Reponsetories\MyRepo;
 
 ?>
+<section class="section">
+    <div class="section-header text-center">
+        <h1 class="w-100 text-right">Hello <?= Session::get("auth")['name'] ?>!</h1>
+    </div>
+</section>
 <div class="main-content px-0">
     <div class="container">
         <section class="section">

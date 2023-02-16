@@ -5,6 +5,11 @@ use MyTodoList\Reponsetories\WorksRepo;
 
 
 ?>
+<section class="section">
+    <div class="section-header text-center">
+        <h1 class="w-100 text-right">Hello <?= Session::get("auth")['name'] ?>!</h1>
+    </div>
+</section>
 <div class="main-content px-0">
     <div class="container">
         <section class="section">
@@ -12,7 +17,7 @@ use MyTodoList\Reponsetories\WorksRepo;
                 <h1>Works</h1>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="/my-works">works manager</a></div>
-               
+
                 </div>
             </div>
             <div id='calendar'></div>

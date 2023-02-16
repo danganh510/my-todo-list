@@ -24,6 +24,7 @@ class WorksController extends ControllerBase
     }
     //  echo (json_encode($result));exit;
     $this->render([
+      'title' => "Calender",
       'myWorks' => $result
     ]);
   }
