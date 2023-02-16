@@ -1,5 +1,7 @@
 <?php
   use MyTodoList\Reponsetories\WorksRepo;
+  use MyTodoList\Reponsetories\MyRepo;
+
 ?>
 <div class="main-content">
     <section class="section">
@@ -23,11 +25,13 @@
                         </div>
 
                         <div class="card-body">
-                            <form method="post" action="/my-works/<?= strtolower($title) ?>?id=<?=$data['id'] ?>">
+                            <form name="submit-work" method="post" action="<?=  $action ?>">
 
                                 <div class="form-group">
                                     <label for="work_name">Work Name</label>
-                                    <input type="text" value="<?= isset($data['work_name'])  ? $data['work_name'] : "" ?>" id="work_name" name="work_name" class="form-control" required>
+                                    <input type="text" value="<?= isset($data['work_name'])  ? $data['work_name'] : "" ?>" id="work_name" name="work_name" class="form-control" >
+                                    <small class="text-danger msg-name"><?= isset($messages['work_name'])  ? $messages['work_name'] : "" ?></small>
+
                                 </div>
                                 <div class="form-group">
                                     <label for="work_content">Work Content</label>
@@ -35,27 +39,21 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="work_start_date">Work Start Date</label>
-                                    <input type="datetime-local" id="work_start_date" name="work_start_date" value="<?= isset($data['work_start_date'])  ? $data['work_start_date'] : "" ?>" class="form-control datepicker" required>
+                                    <input type="datetime-local" id="work_start_date" name="work_start_date" value="<?= isset($data['work_start_date'])  ? $data['work_start_date'] : "" ?>" class="form-control datepicker" >
+                                    <small class="text-danger msg-start-date"><?= isset($messages['work_start_date'])  ? $messages['work_start_date'] : "" ?></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="work_end_date">Work End Date</label>
-                                    <input type="datetime-local"  id="work_end_date" name="work_end_date" value="<?= isset($data['work_end_date'])  ? $data['work_end_date'] : "" ?>" class="form-control datepicker" required>
+                                    <input type="datetime-local"  id="work_end_date" name="work_end_date" value="<?= isset($data['work_end_date'])  ? $data['work_end_date'] : "" ?>" class="form-control datepicker" >
+                                    <small class="text-danger msg-end-date"><?= isset($messages['work_end_date'])  ? $messages['work_end_date'] : "" ?></small>
                                 </div>
                                 <div class="form-group">
                                     <label for="work_status">Work Status</label>
                                     <select id="work_status" name="work_status" class="form-control">
-                                        <?php
-                                        foreach (WorksRepo::ARR_STATUS as $status) :
-                                            $selected = "";
-                                            if (!empty($data['work_status']) && $status == $data['work_status']) {
-                                                $selected = "selected";
-                                            }
-                                        ?>
-                                            <option <?= $selected ?> value="<?= $status  ?>"><?= ucfirst($status)  ?></option>
-                                        <?php endforeach ?>
+                                    <?= MyRepo::getComboboxStatusWork($data['work_status']) ?>
                                     </select>
                                 </div>
-                                <button type="submit" class="btn btn-primary"><?= $title ?></button>
+                                <button type="submit" id="submitWork" class="btn btn-primary"><?= $title ?></button>
                             </form>
                         </div>
                     </div>
@@ -64,3 +62,38 @@
         </div>
     </section>
 </div>
+<script>
+    commands.push(function() {
+        $('form[name=submit-work]').submit(function (event) {
+            var valid = true;
+            if ($('input[name=work_name]').val() == '') {
+                $('.msg-name').text('Name field is required.');
+                $('#work_name').addClass("border-red");
+                valid = false;
+            } else {
+                $('.msg-name').text('');
+                $('#work_name').removeClass("border-red");
+            }
+            if ($('input[name=work_start_date]').val() == '') {
+                $('.msg-start-date').text('Start Date field is required.');
+                $('#work_start_date').addClass("border-red");
+                valid = false;
+            }else {
+                $('.msg-start-date').text('');
+                $('#work_start_date').removeClass("border-red");
+            }
+            if ($('input[name=work_end_date]').val() == '') {
+                $('.msg-end-date').text('End Date field is required.');
+                $('#work_end_date').addClass("border-red");
+                valid = false;
+            }else {
+                $('.msg-end-date').text('');
+                $('#work_end_date').removeClass("border-red");
+            }
+            if (!valid) event.preventDefault();
+            if (valid) {
+                $('button[name=submitWork]').prop('disabled', true);
+            }
+        });
+    });
+</script>

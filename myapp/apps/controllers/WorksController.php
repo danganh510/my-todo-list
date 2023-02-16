@@ -199,9 +199,9 @@ class WorksController extends ControllerBase
         'data' => $data,
         'messages' => $messages,
         'title' => "Update",
-        'action' => 'my-works/update'
+        'action' => 'my-works/update?id='.$data['id']
       ],
-      'works/create'
+      'works/update'
     );
   }
 
