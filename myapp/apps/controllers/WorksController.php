@@ -79,9 +79,10 @@ class WorksController extends ControllerBase
     $offset = ($page - 1) * 5;
 
 
-    $sql_total = "SELECT COUNT(*) as total FROM works WHERE 1";
+    $sql_total = "SELECT COUNT(*) as total FROM works WHERE :user_id";
     $sql_search = "";
-    $sql = "SELECT * FROM works WHERE 1";
+    $sql = "SELECT * FROM works WHERE :user_id";
+    $params['user_id'] = Session::get("auth")['id'];
 
 
     if (!empty($_POST) || !empty($_GET)) {
